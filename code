@@ -1,0 +1,63 @@
+#include <stdio.h>
+
+#define MAX_STUDENTS 100
+#define SUBJECTS 3
+
+struct Student {
+    char name[50];
+    float marks[SUBJECTS];
+    float average;
+    char grade;
+};
+
+char calculateGrade(float average) {
+    if (average >= 90) return 'A';
+    if (average >= 80) return 'B';
+    if (average >= 70) return 'C';
+    if (average >= 60) return 'D';
+    return 'F';
+}
+
+int main(void) {
+    struct Student students[MAX_STUDENTS];
+    int numberOfStudents;
+    float classTotal = 0;
+
+    printf("Enter the number of students (1-%d): ", MAX_STUDENTS);
+    scanf("%d", &numberOfStudents);
+
+    if (numberOfStudents < 1 || numberOfStudents > MAX_STUDENTS) {
+        printf("Invalid number of students.\n");
+        return 1;
+    }
+
+    for (int i = 0; i < numberOfStudents; i++) {
+        printf("\nStudent %d name: ", i + 1);
+        scanf(" %49[^\n]", students[i].name);
+
+        float total = 0;
+        for (int j = 0; j < SUBJECTS; j++) {
+            printf("Enter mark for subject %d (0-100): ", j + 1);
+            scanf("%f", &students[i].marks[j]);
+
+            total += students[i].marks[j];
+        }
+
+        students[i].average = total / SUBJECTS;
+        students[i].grade = calculateGrade(students[i].average);
+        classTotal += students[i].average;
+    }
+
+    printf("\n--- Student Results ---\n");
+    for (int i = 0; i < numberOfStudents; i++) {
+        printf("%s: Average = %.2f, Grade = %c\n",
+               students[i].name,
+               students[i].average,
+               students[i].grade);
+    }
+
+    printf("\nClass average: %.2f\n", classTotal / numberOfStudents);
+
+    return 0;
+}
+
